@@ -1,0 +1,40 @@
+name: "outliers"
+config:
+  topology.workers: 1
+
+components:
+  - id: "latencyGenerator"
+    className: "com.microsoft.hdinsight.storm.examples.LatencyGenerator"
+    constructorArgs:
+      - 100
+      - 60000
+      - 0.8
+      - -5
+
+  - id: "messageGenerator"
+    className: "com.microsoft.hdinsight.storm.examples.MessageGenerator"
+    constructorArgs:
+      - 100
+      - true
+
+spouts:
+  - id: "junkSpout"
+    className: "com.microsoft.hdinsight.storm.examples.JunkSpout"
+    parallelism: 1
+    constructorArgs:
+      - ref: "messageGenerator"
+      - 0
+
+bolts:
+  - id: "latencyBolt"
+    className: "com.microsoft.hdinsight.storm.examples.LatencyBolt"
+    parallelism: 14
+    constructorArgs:
+      - ref: "latencyGenerator"
+
+streams:
+  - name: "junkSpout --> latencyBolt"
+    from: "junkSpout"
+    to: "latencyBolt"
+    grouping:
+      type: SHUFFLE
