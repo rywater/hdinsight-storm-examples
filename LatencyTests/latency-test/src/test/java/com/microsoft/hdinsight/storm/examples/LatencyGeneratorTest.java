@@ -4,8 +4,6 @@ import org.HdrHistogram.Histogram;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Sample class for experimenting with different latency values
  */
@@ -20,13 +18,13 @@ public class LatencyGeneratorTest {
 
   @Test
   public void getNextWait() throws Exception {
-    LatencyGenerator latencyGenerator = new LatencyGenerator(100, 100, 0, 0);
+    LatencyGenerator latencyGenerator = new LatencyGenerator(100, 100, 0, 0, .5);
     runTest(latencyGenerator, 1000000);
   }
 
   private void runTest(LatencyGenerator latencyGenerator, int iterations) {
     for (int i = 0; i < iterations; i++) {
-      consumeResult(latencyGenerator.getNextWait());
+      consumeResult(latencyGenerator.determineNextWait(i % 10));
     }
     printHistogram();
   }
