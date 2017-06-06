@@ -10,6 +10,7 @@ components:
       - 100
       - 0
       - 0
+      - 1
 
   - id: "messageGenerator"
     className: "com.microsoft.hdinsight.storm.examples.MessageGenerator"
